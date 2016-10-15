@@ -1,4 +1,6 @@
- This is a lightweight nodejs based api to integrate with the kong api gateway(https://getkong.org)
+Kong plugin to serve up response data from redis based on request path,
+query parameters and post body JSON params.
+
     Copyright (C) 2016  Cliff Cyphers
 
     This program is free software: you can redistribute it and/or modify
