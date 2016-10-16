@@ -70,7 +70,8 @@ function CustomHandler:new()
 end
 
 function CustomHandler:access(config)
-  cache:get(ngx.var.request_uri)
+  local path = string.match(ngx.var.request_uri, "(.*)?")
+  cache:get(path)
 end
 
 return CustomHandler
