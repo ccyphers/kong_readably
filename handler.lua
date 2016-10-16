@@ -55,6 +55,7 @@ function Cache:get(path)
   v = self.redis_client:get(k)
 
   if v then
+    ngx.header.content_type = "application/json"
    ngx.say(v)
    ngx.exit(200)
   end
