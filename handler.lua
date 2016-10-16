@@ -2,11 +2,14 @@ local BasePlugin = require "kong.plugins.base_plugin"
 local CustomHandler = BasePlugin:extend()
 local Cache = {}
 
+local base_path = (...):match("(.-)[^%.]+$")
+local md5 = require(base_path .. "md5")
+
 function Cache:new(params)
   params = params or {}
-  params.redis = require "redis"
+  params.redis = require(base_path .. "redis")
   params.redis_client = params.redis.connect('127.0.0.1', 6379)
-  params.cjson = require("cjson")
+  --params.cjson = require("cjson")
   setmetatable(params, self)
   self.__index = self
   return params
@@ -32,7 +35,7 @@ function Cache:get(path)
   end
 
   table.sort(keys)
-  local md5 = require("md5")
+  
   local str = ""
 
   if #keys > 0 then
@@ -42,9 +45,13 @@ function Cache:get(path)
     end
   end
 
+  --require('mobdebug').start('127.0.0.1')
+
+
   local sum = md5.sumhexa(str)
   local k = ngx.req.get_method() .. path .. "-----" .. sum
 
+  --require('mobdebug').done()
   v = self.redis_client:get(k)
 
   if v then
