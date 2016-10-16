@@ -37,27 +37,25 @@ function Cache:get(path)
   table.sort(keys)
   
   local str = ""
-
-  if #keys > 0 then
-    for i = 0, #keys do
-      k = keys[i]
-      str = str .. k .. "=" .. params[k]
-    end
-  end
-
   --require('mobdebug').start('127.0.0.1')
-
+  --require('mobdebug').done()
+  
+  for i = 0, #keys do      
+    k = keys[i]
+    if k then
+      str = str .. k .. "=" .. params[k]
+    end      
+  end
 
   local sum = md5.sumhexa(str)
   local k = ngx.req.get_method() .. path .. "-----" .. sum
 
-  --require('mobdebug').done()
   v = self.redis_client:get(k)
 
   if v then
     ngx.header.content_type = "application/json"
-   ngx.say(v)
-   ngx.exit(200)
+    ngx.say(v)
+    ngx.exit(200)
   end
 end
 
@@ -71,7 +69,11 @@ function CustomHandler:new()
 end
 
 function CustomHandler:access(config)
-  local path = string.match(ngx.var.request_uri, "(.*)?")
+  local full_p = ngx.var.request_uri
+  local path = string.match(full_p, "(.*)?")
+  if not path then
+    path = full_p
+  end 
   cache:get(path)
 end
 
