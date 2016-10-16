@@ -40,7 +40,7 @@ function Cache:get(path)
   
   for i = 0, #keys do      
     k = keys[i]
-    if k && type(params[k]) == 'string' then
+    if k and type(params[k]) == 'string' then
       str = str .. k .. "=" .. params[k]
     end      
   end
