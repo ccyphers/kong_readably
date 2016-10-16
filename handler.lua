@@ -37,12 +37,10 @@ function Cache:get(path)
   table.sort(keys)
   
   local str = ""
-  --require('mobdebug').start('127.0.0.1')
-  --require('mobdebug').done()
   
   for i = 0, #keys do      
     k = keys[i]
-    if k then
+    if k && type(params[k]) == 'string' then
       str = str .. k .. "=" .. params[k]
     end      
   end
