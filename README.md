@@ -8,12 +8,10 @@ https://getkong.org/docs/0.9.x/configuration/
 
 Next add the plugin to an API:
 
-    POST /apis/{name or id}/plugins/readably_redis
+    POST /apis/{name or id}/plugins
 
     Required Body Attribute:
     name=readably_redis
-
-
 
     Optional Body Attributes:
     config.redis_host=somehost - defaults to 127.0.0.1
@@ -21,19 +19,19 @@ Next add the plugin to an API:
 
 
 ## Structure of cache
-HTTP_METHOD_NAME/some/api/path-----MD5_SUM(based on sorted query string)
+    HTTP_METHOD_NAME/some/api/path-----MD5_SUM(based on sorted query string)
 
 MD5 is constructed via:
 
-'sorted_arg1=value1' + 'sorted_arg2=value2' + ...
+    'sorted_arg1=value1' + 'sorted_arg2=value2' + ...
 
 Example request:
 
-GET /api/search?term=blah&limit=10
+    GET /api/search?term=blah&limit=10
 
 Results in a redis key named:
 
-GET/api/search-----2e4d2cc4bf3902e93b3d7eb9eb2a4690
+    GET/api/search-----2e4d2cc4bf3902e93b3d7eb9eb2a4690
 
 ## Endpoint updates
 Any paths where this plugin is enabled should be updated so that the endpoint handling the said
