@@ -1,5 +1,6 @@
 # kong_readably
 
+
 Is a kong plugin to serve api data from redis
 
 First update your kong config to include the plugin using the configuration key custom_plugins, per:
