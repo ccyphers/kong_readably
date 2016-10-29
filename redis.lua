@@ -1,5 +1,3 @@
--- From https://github.com/nrk/redis-lua/blob/version-2.0/LICENSE
-
 local redis = {
     _VERSION     = 'redis-lua 2.0.5-dev',
     _DESCRIPTION = 'A Lua client library for the redis key value storage system.',
