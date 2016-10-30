@@ -33,11 +33,18 @@ Results in a redis key named:
 
     GET/api/search-----2e4d2cc4bf3902e93b3d7eb9eb2a4690
 
-## Endpoint updates
-Any paths where this plugin is enabled should be updated so that the endpoint handling the said
-path updates the redis cache as needed.  If the endpoint never adds items to Redis then the plugin
+## Upstream Endpoint updates
+Any paths where this plugin is enabled should be updated so that the service pointed to by the
+upstream_url modifies the cache data as needed.  If the endpoint never adds items to Redis then the plugin
 will simply allow kong to continue processing the request ultimately routing to the upstream host.
 
 If a cache key is found then kong_readably will set the response body using the cache data and
 the response will be sent back to the client, halting any additional kong processing.
+
+Here's an example node service that adds response data to the cache:
+
+https://github.com/ccyphers/kong_example/blob/master/api/google/node/index.js
+https://github.com/ccyphers/kong_example/blob/master/api/google/node/readably_redis.js
+
+
 
