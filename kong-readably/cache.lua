@@ -1,10 +1,10 @@
 local Cache = {}
 local base_path = (...):match("(.-)[^%.]+$")
-local md5 = require(base_path .. "md5")
+local md5 = require("kong-readably.md5")
 
 function Cache:new(params)
   params = params or {}
-  params.redis = require(base_path .. "redis")
+  params.redis = require("kong-readably.redis")
   params.redis_host = params.redis_host or '127.0.0.1'
   params.redis_port = params.redis_port or 6379
   params.redis_client = params.redis.connect(params.redis_host, params.redis_port)

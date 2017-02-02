@@ -1,7 +1,7 @@
 local BasePlugin = require "kong.plugins.base_plugin"
 local CustomHandler = BasePlugin:extend()
 local base_path = (...):match("(.-)[^%.]+$")
-local Cache = require(base_path .. "cache")
+local Cache = require("kong-readably.cache")
 
 local cache --= Cache:new()
 
