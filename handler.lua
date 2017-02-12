@@ -2,16 +2,19 @@ local BasePlugin = require "kong.plugins.base_plugin"
 local CustomHandler = BasePlugin:extend()
 local base_path = (...):match("(.-)[^%.]+$")
 local Cache = require("kong-readably.cache")
-
+local kong_conf = require("kong.singletons").configuration
 local cache
-
+local plp = require('pl.pretty')
 function CustomHandler:new()
   CustomHandler.super.new(self, "kong_readably")
 end
 
-function CustomHandler:init_worker(config)
+--function CustomHandler:init_worker(config)
+function CustomHandler:init_worker()
   CustomHandler.super.init_worker(self)
-  cache = Cache:new(config)
+  print('*************')
+  print(plp.dump(kong_conf)) 
+  cache = Cache:new(kong_conf)
 end
 
 function CustomHandler:access(config)

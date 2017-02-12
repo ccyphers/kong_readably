@@ -2,33 +2,34 @@ local Cache = {}
 local base_path = (...):match("(.-)[^%.]+$")
 local md5 = require("kong-readably.md5")
 
-function Cache:new(params)
-  params = params or {}
-  params.redis = require("kong-readably.redis")
-  params.redis_host = params.redis_host or '127.0.0.1'
-  params.redis_port = params.redis_port or 6379
-  params.redis_client = params.redis.connect(params.redis_host, params.redis_port)
-  --params.cjson = require("cjson")
+function Cache:new()
+  params = {}
   setmetatable(params, self)
   self.__index = self
   return params
 end
 
-function Cache:get(path)
+function Cache:get(path, options)
+  options.redis_host = options.redis_host or '127.0.0.1'
+  options.redis_port = options.redis_port or 6380
+  
   local keys = {}
   local params = ngx.req.get_uri_args()
-  
-  -- for now leaving body arguments - need to update nginx config to allow access to body
-  --local post_args = ngx.req.get_post_args()
 
-  --for k,v in pairs(post_args) do
-  --  params[k] = v
-  --end
+  local redis = require "resty.redis"
+  local red = redis:new()
+  
+  red:set_timeout(1000)
+  
+  local ok, err = red:connect(options.redis_host, options.redis_port)
+ 
+  if not ok then
+    ngx.log(ngx.NOTICE, 'Could not connect to redis')
+    return 
+  end  
 
   local ct = 0
   for k,v in pairs(params) do
-    -- print("---K: " .. k)
-    -- print("---V: " .. v)
     keys[ct] = k
     ct = ct + 1
   end
@@ -46,10 +47,17 @@ function Cache:get(path)
 
   local sum = md5.sumhexa(str)
   local k = ngx.req.get_method() .. path .. "-----" .. sum
+  --ngx.log(ngx.NOTICE, 'Trying to get cache for ' .. k)
+  local v, err = red:get(k)
+  
+  if err then
+    ngx.log(ngx.NOTICE, '******************* Could not get cache ' .. err)
+    return
+  end  
 
-  v = self.redis_client:get(k)
+  local ok, err = red:set_keepalive(10000, 100)
 
-  if v then
+  if not v == 'userdata: NULL' then
     ngx.header.content_type = "application/json"
     ngx.say(v)
     ngx.exit(200)
