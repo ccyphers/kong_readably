@@ -6,7 +6,7 @@ Is a kong plugin to serve api data from redis
 ## Install Kong from:
 https://github.com/ccyphers/kong/tree/my_next
 
-This is needed to that the redis connection information can be defined by the main kong.conf.
+This is needed so that the redis connection information can be defined by the main kong.conf.
 
 The only configuration a plugin has is on a per connection basis, and it's best
 if connection pools are created in the Nginx worker to be shared by
