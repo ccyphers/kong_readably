@@ -9,9 +9,10 @@ function CustomHandler:new()
   CustomHandler.super.new(self, "kong_readably")
 end
 
-function CustomHandler:init_worker(config)
+function CustomHandler:init_worker()
   CustomHandler.super.init_worker(self)
-  cache = Cache:new(config)
+  local conf = require("kong.singletons").configuration
+  cache = Cache:new(conf)
 end
 
 function CustomHandler:access(config)
