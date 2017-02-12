@@ -3,6 +3,28 @@
 
 Is a kong plugin to serve api data from redis
 
+## Install Kong from:
+https://github.com/ccyphers/kong/tree/my_next
+
+This is needed to that the redis connection information can be defined by the main kong.conf.
+
+The only configuration a plugin has is on a per connection basis, and it's best
+if connection pools are created in the Nginx worker to be shared by
+all request, limiting the number of socket connections to redis.
+
+If you don't want to install this fork of Kong, you can run with the mainline version,
+however you won't be able to specify the redis connection information and will be limited
+to the default values.
+
+
+## kong.conf:
+    custom_plugins = kongreadably
+    redis_host = redishost
+    redis_port = redisport
+
+if redis_host and redis_port is left out of the configuration it will default
+to 127.0.0.1 and the port will default to 6379.
+
 First update your kong config to include the plugin using the configuration key custom_plugins, per:
 https://getkong.org/docs/0.9.x/configuration/
 
@@ -12,10 +34,6 @@ Next add the plugin to an API:
 
     Required Body Attribute:
     name=readably_redis
-
-    Optional Body Attributes:
-    config.redis_host=somehost - defaults to 127.0.0.1
-    config.redis_port=someNumber - defaults to 6379
 
 
 ## Structure of cache
