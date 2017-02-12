@@ -19,7 +19,7 @@ config.redis_port=someNumber - defaults to 6379
    license = "AGPL3"
 }
 dependencies = {
-   "lua >= 5.1, < 5.4"
+   "kong >= 0.9"
 }
 
 build = {
