@@ -61,8 +61,8 @@ the response will be sent back to the client, halting any additional kong proces
 
 Here's an example node service that adds response data to the cache:
 
-https://github.com/ccyphers/kong_example/blob/master/api/google/node/index.js
-https://github.com/ccyphers/kong_example/blob/master/api/google/node/readably_redis.js
+https://github.com/ccyphers/kiss_arch/blob/master/google/index.js
+https://github.com/ccyphers/readably_redis/blob/master/index.js
 
 
 
